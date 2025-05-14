@@ -1,0 +1,90 @@
+.containerOdermain{
+  width: 100dvw;
+  height: 100dvh;
+  overflow: scroll;
+    background-image: linear-gradient(to top, #fbc2eb 0%, #a6c1ee 100%);
+  }
+  .containerOder {
+    padding: 2rem;
+    background: linear-gradient(135deg, #faf3dd, #b8f2e6);
+    border-radius: 20px;
+    max-width: 900px;
+    margin: 0 auto;
+    font-family: 'Segoe UI', sans-serif;
+    color: black;
+  }
+  
+  .heading {
+    font-size: 2rem;
+    color: #333;
+    margin-bottom: 1rem;
+    text-align: center;
+  }
+  
+  .role {
+    color: #ff6b6b;
+    font-weight: bold;
+  }
+  
+  .loading {
+    text-align: center;
+    font-size: 1.2rem;
+    color: #999;
+  }
+  
+  .noOrders {
+    text-align: center;
+    color: #888;
+    font-size: 1.1rem;
+    margin-top: 2rem;
+  }
+  
+  .orderList {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+  }
+  
+  .orderCard {
+    background-color: #fff;
+    border-left: 6px solid #aed9e0;
+    padding: 1.2rem;
+    border-radius: 12px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+    transition: transform 0.2s ease;
+  }
+  
+  .orderCard:hover {
+    transform: translateY(-4px);
+  }
+  
+  .status {
+    color: #ffa69e;
+    font-weight: bold;
+  }
+  
+
+  .buttonContainer {
+    text-align: center;
+    margin-top: 2rem;
+  }
+  
+  .bottomButton {
+    background: hotpink;
+    border: none;
+    color: white;
+    height: 60px;
+    width: 30%;
+    border-radius: 30px;
+    font-size: 1.1rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+  }
+  
+  .bottomButton:hover {
+    transform: scale(1.05);
+
+  }
+  

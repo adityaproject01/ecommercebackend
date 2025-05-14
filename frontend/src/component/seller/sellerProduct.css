@@ -1,0 +1,92 @@
+.sellerProduct {
+  width: 100dvw;
+  height: 100dvh;
+  overflow-x: scroll;
+  margin: 0;
+  font-family: "Poppins", sans-serif;
+  background: linear-gradient(135deg, #1f1c2c, #928dab);
+
+  color: #fff;
+}
+.sellerProductBody {
+  width: 100%;
+  height: 100%;
+  background: none;
+}
+.sellerProductNav {
+  width: 100%;
+  height: 15%;
+  background: none;
+  border: 1px solid white;
+}
+.sellerSubCategoryBody {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #fff;
+}
+.glass-card {
+  backdrop-filter: blur(15px);
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 20px;
+  padding: 2rem;
+  width: 40%;
+  height: 50%;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+
+.glass-card form label {
+  display: block;
+  margin-bottom: 1rem;
+  font-size: 0.95rem;
+}
+
+.glass-card input[type="text"] {
+  width: 100%;
+  padding: 0.7rem 1rem;
+  border-radius: 10px;
+  border: none;
+  background: rgba(255, 255, 255, 0.15);
+  color: #fff;
+  margin-top: 0.3rem;
+  font-size: 1rem;
+  outline: none;
+}
+
+.glass-card input[type="text"]::placeholder {
+  color: #ddd;
+}
+
+.sellerProductSubmit {
+  width: 100%;
+  padding: 0.9rem;
+  margin-top: 1.5rem;
+  border: none;
+  border-radius: 10px;
+  background: linear-gradient(to right, #667eea, #764ba2);
+  color: white;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.sellerProductSubmit:hover {
+  transform: scale(1.05);
+  box-shadow: 0 4px 20px rgba(118, 75, 162, 0.4);
+}
+
+.image-preview {
+  margin-top: 1rem;
+  text-align: center;
+}
+
+.image-preview img {
+  max-width: 100%;
+  border-radius: 10px;
+  margin-top: 0.5rem;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+}

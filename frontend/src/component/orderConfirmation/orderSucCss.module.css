@@ -1,0 +1,84 @@
+/* .container {
+    overflow: scroll;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 3rem;
+    background: linear-gradient(135deg, #faf3dd, #b8f2e6);
+    height: 100dvh;
+    width: 100dvw;
+  } */
+    .containerOrder{
+        overflow-y: scroll;
+        overflow-x: hidden;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        padding: 3rem;
+        background: linear-gradient(135deg, #faf3dd, #b8f2e6);
+        height: 100dvh;
+        width: 100dvw;
+   }
+  
+   .card {
+    background-color: white;
+    padding: 2rem 2.5rem;
+    border-radius: 20px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    width: 100%;
+    max-width: 600px;
+  }
+  
+  .success {
+    color: #00a896;
+    font-size: 1.8rem;
+    text-align: center;
+    margin-bottom: 1rem;
+  }
+  
+  .subtitle {
+    font-size: 1.2rem;
+    text-align: center;
+    color: #555;
+    margin-bottom: 2rem;
+  }
+  
+  .productList {
+    margin-bottom: 2rem;
+  }
+  
+  .productItem {
+    background-color: #aed9e0;
+    border-radius: 12px;
+    padding: 1rem;
+    margin-bottom: 1rem;
+    color: #333;
+    font-size: 1rem;
+  }
+  
+  .link {
+    display: flex;
+    text-align: center;
+    align-items: center;
+    align-content: center;
+    justify-content: center;
+    background-color: #ffa69e;
+    color: white;
+    padding: 0.75rem;
+    border-radius: 12px;
+    text-decoration: none;
+    font-weight: bold;
+    transition: background-color 0.3s ease;
+  }
+  
+  .link:hover {
+    background-color: #ef233c;
+  }
+  
+  .loading, .error {
+    font-size: 1.5rem;
+    text-align: center;
+    margin-top: 5rem;
+    color: #ef233c;
+  }
+    

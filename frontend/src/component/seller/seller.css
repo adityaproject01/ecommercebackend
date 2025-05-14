@@ -1,0 +1,213 @@
+.seller {
+  background-color: #faf3dd;
+  min-height: 100vh;
+  padding: 20px;
+  font-family: "Segoe UI", sans-serif;
+}
+
+.sellerNav {
+  display: flex;
+  justify-content: flex-end;
+  gap: 12px;
+  margin-bottom: 20px;
+}
+
+.sellerNav button {
+  background-color: #ffa69e;
+  color: #333;
+  border: none;
+  padding: 10px 16px;
+  border-radius: 10px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.sellerNav button:hover {
+  background-color: #f78b7e;
+}
+
+.sellerBody {
+  display: flex;
+  flex-direction: column;
+}
+
+.sellerSubBody {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.sellerGlassCard {
+  background-color: #ffffff;
+  border-radius: 16px;
+  padding: 20px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+  overflow-x: auto;
+}
+
+.product {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  padding: 12px 0;
+  border-bottom: 1px solid #ddd;
+}
+
+.productDetails, .productDetailsDescription {
+  flex: 1 1 150px;
+  padding: 8px;
+  word-break: break-word;
+}
+
+.productDetailsDescription {
+  max-width: 200px;
+}
+
+.actionButton {
+  background-color: transparent;
+  border: none;
+  margin: 0 5px;
+  cursor: pointer;
+  transition: transform 0.2s ease;
+}
+
+.actionButton:hover {
+  transform: scale(1.1);
+}
+
+.actionButton img {
+  height: 20px;
+}
+
+.overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0,0,0,0.4);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+}
+
+.modal {
+  background-color: #b8f2e6;
+  padding: 30px;
+  border-radius: 16px;
+  width: 90%;
+  max-width: 600px;
+  box-shadow: 0 8px 20px rgba(0,0,0,0.2);
+}
+
+.modalNav {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+}
+
+.modalNav h2 {
+  margin: 0;
+  color: #2b2d42;
+}
+
+.modalNav button {
+  background-color: #ef233c;
+  color: white;
+  border: none;
+  padding: 6px 12px;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+}
+
+.modalNav button:hover {
+  background-color: #c1121f;
+}
+
+.productForm {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.productField {
+  display: flex;
+  flex-direction: column;
+}
+
+.productField label {
+  margin-bottom: 4px;
+  font-weight: 600;
+  color: #2b2d42;
+}
+
+.productField input,
+.productField select,
+.productField button {
+  padding: 8px;
+  border-radius: 8px;
+  border: 1px solid #ccc;
+  font-size: 14px;
+}
+
+.productField input[type="file"] {
+  padding: 4px;
+}
+
+.productField button[type="submit"] {
+  background-color: #aed9e0;
+  border: none;
+  font-weight: bold;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.productField button[type="submit"]:hover {
+  background-color: #89c2d9;
+}
+.sellerNav {
+  display: flex;
+  justify-content: space-between;
+  padding: 20px;
+}
+
+.sellerBody {
+  padding: 20px;
+}
+
+.dashboardBox {
+  background-color: #f1f1f1;
+  padding: 20px;
+  margin-bottom: 20px;
+  border-radius: 8px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.dashboardBox h3 {
+  font-size: 1.5rem;
+  margin-bottom: 10px;
+}
+
+.dashboardBox p {
+  font-size: 1.2rem;
+  font-weight: bold;
+}
+
+.sellerGlassCard {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 20px;
+}
+
+.sellerGlassCard div {
+  background-color: #fff;
+  padding: 15px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  border-radius: 8px;
+  flex: 1 1 calc(33.333% - 20px);
+  box-sizing: border-box;
+}

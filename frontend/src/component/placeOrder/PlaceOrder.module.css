@@ -1,0 +1,188 @@
+/* PlaceOrder.module.css */
+* {
+  box-sizing: border-box;
+}
+
+.container {
+  min-height: 100vh;
+  padding: 2rem;
+  background: linear-gradient(to right, #ffa69e, #faf3dd);
+  display: flex;
+  justify-content: center;
+  align-items: start;
+  font-family: "Segoe UI", sans-serif;
+}
+
+.wrapper {
+  display: flex;
+  width: 90%;
+  height: 100dvh;
+  max-width: 1200px;
+  background: white;
+  border-radius: 20px;
+  box-shadow: 0 0 15px rgba(0, 0, 0, 0.15);
+  overflow: hidden;
+  gap: 2rem;
+  padding: 2rem;
+  flex-wrap: wrap;
+
+  
+}
+.sectionLeft{
+  color: black;
+  overflow: scroll;
+  height: 100dvh;
+  flex: 1;
+  min-width: 300px; 
+}
+.sectionRight {
+
+  flex: 1;
+  min-width: 300px;
+}
+
+.sectionTitle,
+.subtitle {
+  font-size: 1.5rem;
+  font-weight: 600;
+  margin-bottom: 1rem;
+  color: #333;
+}
+
+.addressForm input {
+  width: 100%;
+  padding: 0.8rem;
+  margin-bottom: 0.7rem;
+  border-radius: 10px;
+  border: 1px solid #ccc;
+  transition: 0.3s;
+}
+
+.addressForm input:focus {
+  border-color: #ffa69e;
+  box-shadow: 0 0 5px #ffa69e55;
+}
+
+.button {
+  padding: 0.7rem 1.5rem;
+  margin-top: 0.5rem;
+  border-radius: 10px;
+  background-color: #aed9e0;
+  color: #333;
+  font-weight: bold;
+  border: none;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.button:hover {
+  background-color: #b8f2e6;
+  transform: scale(1.03);
+}
+
+.buttonDelete {
+  background-color: #ffa69e;
+}
+
+.buttonDelete:hover {
+  background-color: #f77b72;
+}
+
+.buttonEdit {
+  background-color: #faf3dd;
+}
+
+.addressList {
+  margin-top: 1.5rem;
+}
+
+.addressItem {
+  background-color: #faf3dd;
+  padding: 1rem;
+  border-radius: 12px;
+  margin-bottom: 1rem;
+  border: 2px solid transparent;
+  transition: border-color 0.3s;
+}
+
+.addressItem:hover {
+  border-color: #ffa69e;
+}
+
+.addressItem label {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 0.95rem;
+}
+
+.addressActions {
+  display: flex;
+  gap: 0.5rem;
+  margin-top: 0.5rem;
+}
+
+.cartContainer {
+  background-color: #b8f2e6;
+  padding: 1rem;
+  border-radius: 12px;
+  margin-bottom: 1rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.cartItem {
+  background-color: white;
+  padding: 0.8rem;
+  border-radius: 10px;
+  box-shadow: 0 0 4px rgba(0, 0, 0, 0.05);
+}
+
+.cartItemDetails p {
+  margin: 0;
+}
+
+.itemName {
+  font-weight: 600;
+  color: #2b2d42;
+}
+
+.itemPrice {
+  color: #555;
+}
+
+.totalBox {
+  padding: 1rem;
+  background-color: #aed9e0;
+  border-radius: 10px;
+  text-align: center;
+  font-size: 1.25rem;
+  font-weight: bold;
+  color: #2b2d42;
+  margin-bottom: 1rem;
+}
+
+.placeOrderBtn {
+  width: 100%;
+  padding: 1rem;
+  background-color: #ffa69e;
+  color: white;
+  font-weight: bold;
+  font-size: 1.1rem;
+  border-radius: 10px;
+  border: none;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.placeOrderBtn:hover {
+  background-color: #f77b72;
+  transform: scale(1.03);
+}
+
+.empty {
+  font-size: 1.2rem;
+  text-align: center;
+  color: #333;
+}

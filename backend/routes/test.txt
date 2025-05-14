@@ -1,0 +1,52 @@
+const express = require('express');
+const router = express.Router();
+const db = require('../db');
+const { verifyToken } = require('../middleware/authMiddleware');
+
+// 🛒 Checkout — Move cart items to orders
+router.post('/', verifyToken, (req, res) => {
+  const userId = req.user.id;
+
+  // Step 1: Get items from cart
+  const getCartSql = `
+    SELECT c.product_id, c.quantity, p.price
+    FROM cart c
+    JOIN products p ON c.product_id = p.id
+    WHERE c.user_id = ?
+  `;
+
+  db.query(getCartSql, [userId], (err, cart) => {
+    if (err) return res.status(500).json({ message: err.message });
+
+    if (cartItems.length === 0) {
+      return res.status(400).json({ message: 'Cart is empty' });
+    }
+
+    // Step 2: Prepare order entries
+    const insertOrderSql = `
+      INSERT INTO orders (user_id, product_id, quantity, total_price)
+      VALUES ?
+    `;
+
+    const orderValues = cartItems.map(item => [
+      userId,
+      item.product_id,
+      item.quantity,
+      item.price * item.quantity
+    ]);
+
+    db.query(insertOrderSql, [orderValues], (err) => {
+      if (err) return res.status(500).json({ message: err.message });
+
+      // Step 3: Clear cart
+      const clearCartSql = 'DELETE FROM cart WHERE user_id = ?';
+      db.query(clearCartSql, [userId], (err) => {
+        if (err) return res.status(500).json({ message: err.message });
+
+        res.status(200).json({ message: 'Checkout successful, order placed' });
+      });
+    });
+  });
+});
+
+module.exports = router;

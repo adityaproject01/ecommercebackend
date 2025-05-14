@@ -1,0 +1,149 @@
+/* General body styles */
+.registerbody {
+    font-family: 'Arial', sans-serif;
+    margin: 0;
+    padding: 0;
+    height: 100vh;
+    overflow: hidden;
+    backdrop-filter: blur(15px); /* Glass blur effect */
+    background: linear-gradient(135deg, #2c5364, #203a43, #2c5364, #203a43, #acb6e5);
+
+    /* background: radial-gradient(circle at center, #0f2027, #203a43, #2c5364, #74ebd5, #acb6e5); */
+    background-size: 200% 200%;
+    background-position: center;
+    
+    /* Blur effect */
+
+    
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+  .reHedder{
+    align-items: flex-end;
+    display:flex ;
+    flex-wrap: wrap;
+justify-content: space-around;
+margin-bottom: 20px;
+
+  }
+  .homeBtn{
+    color: white;
+    height: 40px;
+    font-size: 20px ;
+    font-weight: bold;
+    width: 100px;
+    background: none;
+    border: 1px solid skyblue;
+    outline: none;
+    border-radius: 10px ;
+
+  }
+  
+  /* Register container styles */
+  .register {
+    background: rgba(255, 255, 255, 0.1); /* Semi-transparent background */
+    backdrop-filter: blur(15px); /* Glass blur effect */
+    border-radius: 15px;
+    padding: 40px;
+    width: 400px;
+    box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1); /* Subtle shadow for 3D effect */
+    transition: all 0.3s ease;
+  }
+  
+  /* Heading styles */
+  .register p {
+    font-size: 32px;
+    color: #fff;
+    text-align: center;
+    font-weight: bold;
+  }
+  
+  /* Form label styles */
+  .register label {
+    display: block;
+    font-size: 14px;
+    color: #fff;
+    margin-bottom: 5px;
+    font-weight: 600;
+  }
+  
+  /* Input styles */
+  .register input,
+  .register select {
+    width: 100%;
+    padding: 12px;
+    margin-bottom: 15px;
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 10px;
+    color: #fff;
+    font-size: 16px;
+    transition: all 0.3s ease;
+    outline: none;
+  }
+  
+  .register input:focus,
+  .register select:focus {
+    border-color: #4e9bff;
+    box-shadow: 0 0 10px rgba(78, 155, 255, 0.8); /* Blue glow effect */
+  }
+  
+  /* Button styles */
+  .register .regSubBtn {
+    width: 100%;
+    padding: 12px;
+    background: linear-gradient(135deg, #4e9bff, #45a3ff);
+    border: none;
+    border-radius: 10px;
+    color: #fff;
+    font-size: 18px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+  }
+  
+  .register .regSubBtn:hover {
+    background: linear-gradient(135deg, #45a3ff, #4e9bff);
+    transform: scale(1.05);
+  }
+  
+  .register .regSubBtn:active {
+    transform: scale(0.98); /* Slightly shrink on click */
+  }
+  
+  /* Select dropdown styles */
+  .register select {
+    padding: 12px;
+    background-color: rgba(255, 255, 255, 0.1);
+    color: white;
+    border-radius: 10px;
+    border: 1px solid rgba(255, 255, 255, 0.3);
+  }
+  
+  .register select:focus {
+    border-color: #4e9bff;
+    box-shadow: 0 0 10px rgba(78, 155, 255, 0.8);
+  }
+  
+  /* Input hover effect */
+  .register input:hover,
+  .register select:hover {
+    background-color: rgba(255, 255, 255, 0.2);
+  }
+  
+  /* Responsive styling */
+  @media (max-width: 500px) {
+    .register {
+      width: 90%;
+      padding: 30px;
+    }
+  
+    .register p {
+      font-size: 28px;
+    }
+  
+    .register button {
+      font-size: 16px;
+    }
+  }
+  
