@@ -17,7 +17,7 @@ const orderConfirmationRoutes = require("./routes/orderConfirmation");
 const orderHistoryRoutes = require("./routes/orderHistory");
 
 const app = express();
-const PORT = process.env.PORT || 5000;
+const PORT = process.env.PORT || 4000;
 
 // Middlewares
 app.use(cors());
