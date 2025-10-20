@@ -9,15 +9,15 @@ const db = mysql.createConnection({
   database: process.env.DB_NAME,
   port: process.env.DB_PORT,
   ssl: {
-    ca: fs.readFileSync(process.env.DB_SSL_CA),
+    ca: fs.readFileSync(process.env.DB_SSL_CA), // read the pem file
   },
 });
 
 db.connect((err) => {
   if (err) {
-    console.error("❌ Database connection failed:", err);
+    console.error("Database connection failed:", err);
   } else {
-    console.log("✅ Connected to TiDB Cloud Database (Secure TLS)");
+    console.log("✅ Connected to MySQL Database");
   }
 });
 
