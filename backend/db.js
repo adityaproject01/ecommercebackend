@@ -1,5 +1,5 @@
-const fs = require("fs");
 const mysql = require("mysql2");
+const fs = require("fs");
 require("dotenv").config();
 
 const db = mysql.createConnection({
@@ -9,6 +9,16 @@ const db = mysql.createConnection({
   database: process.env.DB_NAME,
   port: process.env.DB_PORT,
   ssl: {
-    ca: process.env.DB_SSL_CA,
+    ca: fs.readFileSync(process.env.DB_SSL_CA),
   },
 });
+
+db.connect((err) => {
+  if (err) {
+    console.error("❌ Database connection failed:", err);
+  } else {
+    console.log("✅ Connected to TiDB Cloud Database (Secure TLS)");
+  }
+});
+
+module.exports = db;
