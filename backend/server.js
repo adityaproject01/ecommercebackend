@@ -1,10 +1,7 @@
 const express = require("express");
 const cors = require("cors");
-require("dotenv").config(); // Load .env variables (important to call early)
+const db = require("./db");
 
-const db = require("./db"); // MySQL connection
-
-// Route imports
 const authRoutes = require("./routes/auth");
 const protectedRoutes = require("./routes/protected");
 const productRoutes = require("./routes/product");
@@ -22,17 +19,16 @@ const orderHistoryRoutes = require("./routes/orderHistory");
 const app = express();
 const PORT = process.env.PORT || 5000;
 
-// ===== MIDDLEWARES =====
+// Middlewares
 app.use(cors());
-app.use(express.json()); // Parse incoming JSON requests
-app.use("/uploads", express.static("uploads")); // Serve uploaded images or files
+app.use(express.json()); // For parsing JSON requests
 
-// ===== API ROUTES =====
-app.use("/api/auth", authRoutes);
-app.use("/api", protectedRoutes);
+// API Routes
+app.use("/api/auth", authRoutes); // Authentication routes
+app.use("/api", protectedRoutes); // Protected routes
 app.use("/api/products", productRoutes);
 app.use("/api/cart", cartRoutes);
-app.use("/api/order", orderRoutes);
+app.use("/api/order", orderRoutes); // Order routes
 app.use("/api/address", addressRoutes);
 app.use("/api/checkout", checkoutRoutes);
 app.use("/api/category", categoryRoutes);
@@ -42,12 +38,14 @@ app.use("/api/subsubsubcategory", subsubsubcategoryRoutes);
 app.use("/api/order-confirmation", orderConfirmationRoutes);
 app.use("/api/order-history", orderHistoryRoutes);
 
-// ===== ROOT ROUTE =====
+app.use("/uploads", express.static("uploads")); // Serve uploaded files
+
+// Default Route
 app.get("/", (req, res) => {
-  res.send("✅ E-Commerce API is live!");
+  res.send("E-Commerce API is running...");
 });
 
-// ===== START SERVER =====
+// Start Server
 app.listen(PORT, () => {
-  console.log(`🚀 Server is running on http://localhost:${PORT}`);
+  console.log(`Server is running on http://localhost:${PORT}`);
 });

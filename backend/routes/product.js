@@ -69,7 +69,25 @@ router.post("/add", verifyToken, upload.single("image"), async (req, res) => {
     }
   );
 });
+router.get("/allProducts", verifyToken, (req, res) => {
+  const user = req.user;
 
+  if (user.role !== "admin") {
+    return res
+      .status(403)
+      .json({ message: "Only admins can access all products" });
+  }
+
+  const sql = "SELECT * FROM products ORDER BY id DESC";
+  db.query(sql, (err, results) => {
+    if (err) return res.status(500).json({ message: err.message });
+
+    res.status(200).json({
+      total: results.length,
+      products: results,
+    });
+  });
+});
 // 🧾 Get products added by the current seller
 router.get("/my-products", verifyToken, (req, res) => {
   const user = req.user;
