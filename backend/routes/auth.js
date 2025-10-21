@@ -30,8 +30,8 @@ router.post("/signup", async (req, res) => {
 
 // Login
 router.post("/login", (req, res) => {
-  console.log("📩 Received login data:", req.body);
   const { email, password } = req.body;
+
   db.query(
     "SELECT * FROM users WHERE email = ?",
     [email],
