@@ -31,7 +31,7 @@ router.post("/signup", async (req, res) => {
 // Login
 router.post("/login", (req, res) => {
   const { email, password } = req.body;
-
+  console.log("Sending:", { email, password }); 
   db.query(
     "SELECT * FROM users WHERE email = ?",
     [email],
