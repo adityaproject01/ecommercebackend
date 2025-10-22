@@ -3,7 +3,8 @@ const router = express.Router();
 const db = require("../db");
 const multer = require("multer");
 const { verifyToken } = require("../middleware/authMiddleware");
-
+  const BASE_URL = "https://ecommercebackend-1-fwcd.onrender.com";
+  const baseUrl = process.env.BASE_URL || "http://localhost:5000";
 // ➕ Setup Multer Storage for image upload
 const storage = multer.diskStorage({
   destination: (req, file, cb) => {
@@ -200,13 +201,13 @@ router.put("/:id", verifyToken, upload.single("image"), (req, res) => {
   const { id } = req.params;
   const { name, description, sub_sub_subcategory_id, quantity } = req.body;
   const user = req.user;
-  const BASE_URL="https://ecommercebackend-1-fwcd.onrender.com"
-  const baseUrl = process.env.BASE_URL || "http://localhost:5000";
+
 
  // const baseUrl = req.protocol + "://" + req.get("host");
   const imageFilename = req.file
     ? `${baseUrl}/uploads/${req.file.filename}`
     : null;
+  
   const price = parseFloat(req.body.price);
   const subSubSubcatId =
     sub_sub_subcategory_id && sub_sub_subcategory_id.trim() !== ""
