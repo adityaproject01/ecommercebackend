@@ -47,5 +47,7 @@ app.get("/", (req, res) => {
 
 // Start Server
 app.listen(PORT, () => {
-  console.log(`Server is running on http://localhost:${PORT}`);
+  console.log(
+    `Server is running on https://ecommercebackend-87gs.onrender.com`
+  );
 });
