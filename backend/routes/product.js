@@ -25,7 +25,9 @@ router.post("/add", verifyToken, upload.single("image"), async (req, res) => {
   }
 
   const { name, description, sub_sub_subcategory_id, quantity } = req.body;
-  const baseUrl = req.protocol + "://" + req.get("host");
+  // const baseUrl = req.protocol + "://" + req.get("host");
+  const baseUrl="https://ecommercebackend-1-fwcd.onrender.com"
+
   const imageFilename = req.file
     ? `${baseUrl}/uploads/${req.file.filename}`
     : null;

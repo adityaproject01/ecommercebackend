@@ -20,7 +20,8 @@ router.post("/add", verifyToken, upload.single("image"), (req, res) => {
       .status(400)
       .json({ message: "Category name and image are required" });
   }
-  const baseUrl = req.protocol + "://" + req.get("host");
+  // const baseUrl = req.protocol + "://" + req.get("host");
+  const baseUrl="https://ecommercebackend-1-fwcd.onrender.com"
   const image_url = req.file ? `${baseUrl}/uploads/${req.file.filename}` : null;
   // const image_url = `/uploads/${req.file.filename}`;
   console.log(image_url, "dsdsd");
