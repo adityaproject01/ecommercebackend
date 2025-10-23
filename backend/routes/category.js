@@ -8,7 +8,7 @@ const upload = require("../middleware/upload");
 // ➕ Add category (admin only)
 
 router.post("/add", verifyToken, upload.single("image"), (req, res) => {
-  console.log(req.body);
+  console.log(req.body,"d");
   const user = req.user;
   const { name } = req.body;
   if (user.role !== "admin") {

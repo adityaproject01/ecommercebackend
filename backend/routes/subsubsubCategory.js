@@ -150,7 +150,7 @@ router.get("/subsubcategory/:sub_subcategory_id", (req, res) => {
     SELECT 
       id, name, image_url, sub_subcategory_id
     FROM sub_sub_subcategories
-    WHERE sub_subcategory_id = ?
+    WHERE subsubcategory_id = ?
     ORDER BY name ASC
   `;
 
