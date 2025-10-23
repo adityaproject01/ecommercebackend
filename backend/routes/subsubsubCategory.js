@@ -148,7 +148,7 @@ router.get("/subsubcategory/:sub_subcategory_id", (req, res) => {
   const subSubcategoryId = req.params.sub_subcategory_id;
   const sql = `
     SELECT 
-      id, name, image_url, sub_subcategory_id
+      id, name, image_url, subsubcategory_id
     FROM sub_sub_subcategories
     WHERE subsubcategory_id = ?
     ORDER BY name ASC
@@ -160,5 +160,6 @@ router.get("/subsubcategory/:sub_subcategory_id", (req, res) => {
     res.status(200).json(results);
   });
 });
+
 
 module.exports = router;
