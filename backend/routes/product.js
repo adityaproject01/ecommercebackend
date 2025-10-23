@@ -25,17 +25,17 @@ router.post("/add", verifyToken, upload.single("image"), async (req, res) => {
     return res.status(403).json({ message: "Only sellers can add products" });
   }
 
-  const { name, description, sub_sub_subcategory_id, quantity } = req.body;
+  const { name, description, subsubsubcategory_id, quantity } = req.body;
   // const baseUrl = req.protocol + "://" + req.get("host");
-  const baseUrl="https://ecommercebackend-87gs.onrender.com/"
+  const baseUrl = "https://ecommercebackend-87gs.onrender.com/";
 
   const imageFilename = req.file
     ? `${baseUrl}/uploads/${req.file.filename}`
     : null;
   const price = parseFloat(req.body.price);
   const subSubSubcatId =
-    sub_sub_subcategory_id && sub_sub_subcategory_id.trim() !== ""
-      ? parseInt(sub_sub_subcategory_id)
+    subsubsubcategory_id && subsubsubcategory_id.trim() !== ""
+      ? parseInt(subsubsubcategory_id)
       : null;
   const qty = quantity ? parseInt(quantity) : 0;
 
@@ -47,7 +47,7 @@ router.post("/add", verifyToken, upload.single("image"), async (req, res) => {
   }
 
   const sql = `
-    INSERT INTO products (name, description, price, quantity, sub_sub_subcategory_id, image_url, seller_id)
+    INSERT INTO products (name, description, price, quantity, subsubsubcategory_id, image_url, seller_id)
     VALUES (?, ?, ?, ?, ?, ?, ?)
   `;
 
@@ -147,7 +147,7 @@ router.get("/", (req, res) => {
   }
 
   if (sub_sub_subcategory) {
-    conditions.push("sub_sub_subcategory_id = ?");
+    conditions.push("subsubsubcategory_id = ?");
     values.push(sub_sub_subcategory);
   }
 
@@ -199,19 +199,18 @@ router.get("/:id", (req, res) => {
 // ✏️ Update product (Only owner or admin)
 router.put("/:id", verifyToken, upload.single("image"), (req, res) => {
   const { id } = req.params;
-  const { name, description, sub_sub_subcategory_id, quantity } = req.body;
+  const { name, description, subsubsubcategory_id, quantity } = req.body;
   const user = req.user;
 
-
- // const baseUrl = req.protocol + "://" + req.get("host");
+  // const baseUrl = req.protocol + "://" + req.get("host");
   const imageFilename = req.file
     ? `${baseUrl}/uploads/${req.file.filename}`
     : null;
-  
+
   const price = parseFloat(req.body.price);
   const subSubSubcatId =
-    sub_sub_subcategory_id && sub_sub_subcategory_id.trim() !== ""
-      ? parseInt(sub_sub_subcategory_id)
+    subsubsubcategory_id && subsubsubcategory_id.trim() !== ""
+      ? parseInt(subsubsubcategory_id)
       : null;
   const qty = quantity ? parseInt(quantity) : 0;
 
@@ -232,7 +231,7 @@ router.put("/:id", verifyToken, upload.single("image"), (req, res) => {
 
     const updateSQL = `
       UPDATE products
-      SET name = ?, description = ?, price = ?, quantity = ?, sub_sub_subcategory_id = ?, image_url = ?
+      SET name = ?, description = ?, price = ?, quantity = ?, subsubsubcategory_id = ?, image_url = ?
       WHERE id = ?
     `;
 
