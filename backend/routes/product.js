@@ -199,23 +199,41 @@ router.get("/:id", (req, res) => {
 // ✏️ Update product (Only owner or admin)
 router.put("/:id", verifyToken, upload.single("image"), (req, res) => {
   const { id } = req.params;
-  const { name, description, subsubsubcategory_id, quantity } = req.body;
+  const {
+    name,
+    description,
+    subsubsubcategory_id,
+    quantity,
+    price: priceStr,
+  } = req.body;
   const user = req.user;
 
-  // const baseUrl = req.protocol + "://" + req.get("host");
+  const baseUrl = req.protocol + "://" + req.get("host");
+
   const imageFilename = req.file
     ? `${baseUrl}/uploads/${req.file.filename}`
     : null;
 
-  const price = parseFloat(req.body.price);
+  const price = parseFloat(priceStr);
   const subSubSubcatId =
     subsubsubcategory_id && subsubsubcategory_id.trim() !== ""
       ? parseInt(subsubsubcategory_id)
       : null;
   const qty = quantity ? parseInt(quantity) : 0;
 
+  // Basic validation
+  if (!name || isNaN(price) || !subSubSubcatId || isNaN(qty)) {
+    return res.status(400).json({
+      message:
+        "Name, valid Price, Quantity, and Sub-Sub-Subcategory ID are required",
+    });
+  }
+
   db.query("SELECT * FROM products WHERE id = ?", [id], (err, results) => {
-    if (err) return res.status(500).json({ message: err.message });
+    if (err) {
+      console.error("Select product error:", err);
+      return res.status(500).json({ message: err.message });
+    }
     if (results.length === 0)
       return res.status(404).json({ message: "Product not found" });
 
@@ -237,9 +255,12 @@ router.put("/:id", verifyToken, upload.single("image"), (req, res) => {
 
     db.query(
       updateSQL,
-      [name, description, price, qty, subSubSubcatId, image_url, id],
+      [name, description || "", price, qty, subSubSubcatId, image_url, id],
       (err, result) => {
-        if (err) return res.status(500).json({ message: err.message });
+        if (err) {
+          console.error("Update product error:", err);
+          return res.status(500).json({ message: err.message });
+        }
 
         return res
           .status(200)
@@ -248,6 +269,7 @@ router.put("/:id", verifyToken, upload.single("image"), (req, res) => {
     );
   });
 });
+
 
 // ❌ Delete product by ID
 router.delete("/:id", verifyToken, (req, res) => {
