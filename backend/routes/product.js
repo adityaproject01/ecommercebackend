@@ -5,7 +5,8 @@ const multer = require("multer");
 const { verifyToken } = require("../middleware/authMiddleware");
   const BASE_URL = "https://ecommercebackend-87gs.onrender.com/";
 const baseUrl = process.env.BASE_URL || "http://localhost:5000";
-  const { uploadWithCloudinary } = require("../middleware/uploadCloudinary");
+const uploadToCloudinary = require("../middleware/uploadCloudinary");
+
 
 // ➕ Setup Multer Storage for image upload
 const storage = multer.diskStorage({
@@ -23,7 +24,7 @@ const upload = multer({ storage: storage });
 router.post(
   "/add",
   verifyToken,
-  uploadWithCloudinary("image"),
+  uploadToCloudinary("image"),
   async (req, res) => {
     const user = req.user;
 
@@ -204,7 +205,7 @@ router.get("/:id", (req, res) => {
 });
 
 // ✏️ Update product (Only owner or admin)
-router.put("/:id", verifyToken, uploadWithCloudinary("image"), (req, res) => {
+router.put("/:id", verifyToken, uploadToCloudinary("image"), (req, res) => {
   const { id } = req.params;
   const {
     name,

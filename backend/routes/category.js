@@ -4,12 +4,12 @@ const express = require("express");
 const router = express.Router();
 const db = require("../db");
 const { verifyToken } = require("../middleware/authMiddleware");
-  const { uploadWithCloudinary } = require("../middleware/uploadCloudinary");
+const uploadToCloudinary = require("../middleware/uploadCloudinary");
 
 
 // ➕ Add category (admin only)
 
-router.post("/add", verifyToken, uploadWithCloudinary("image"), (req, res) => {
+router.post("/add", verifyToken, uploadToCloudinary("image"), (req, res) => {
   console.log(req.body, "d");
   const user = req.user;
   const { name } = req.body;
@@ -45,7 +45,7 @@ router.get("/", (req, res) => {
 });
 
 // 🔄 Update category (admin only)
-router.put("/:id", verifyToken, uploadWithCloudinary("image"), (req, res) => {
+router.put("/:id", verifyToken, uploadToCloudinary("image"), (req, res) => {
   const user = req.user;
   const categoryId = req.params.id;
   const { name } = req.body;

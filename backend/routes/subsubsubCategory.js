@@ -2,10 +2,11 @@ const express = require("express");
 const router = express.Router();
 const db = require("../db");
 const { verifyToken } = require("../middleware/authMiddleware");
-  const { uploadWithCloudinary } = require("../middleware/uploadCloudinary");
+const uploadToCloudinary = require("../middleware/uploadCloudinary");
+
 
 // ✅ Create Sub-Sub-Subcategory
-router.post("/add", verifyToken, uploadWithCloudinary("image"), (req, res) => {
+router.post("/add", verifyToken, uploadToCloudinary("image"), (req, res) => {
   const user = req.user;
   const { name = "" } = req.body;
   const sub_subcategory_id = parseInt(req.body.sub_subcategory_id || 0);
@@ -36,7 +37,7 @@ router.post("/add", verifyToken, uploadWithCloudinary("image"), (req, res) => {
 });
 
 // 📝 Update Sub-Sub-Subcategory
-router.put("/:id", verifyToken, uploadWithCloudinary("image"), (req, res) => {
+router.put("/:id", verifyToken, uploadToCloudinary("image"), (req, res) => {
   const user = req.user;
   const { name = "", sub_subcategory_id } = req.body;
   const id = req.params.id;
