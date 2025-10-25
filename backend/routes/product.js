@@ -3,8 +3,8 @@ const router = express.Router();
 const db = require("../db");
 const multer = require("multer");
 const { verifyToken } = require("../middleware/authMiddleware");
-const BASE_URL = "https://ecommercebackend-1-fwcd.onrender.com";
-const baseUrl =process.env.BASE_URL || "https://ecommercebackend-1-fwcd.onrender.com";
+  const BASE_URL = "https://ecommercebackend-87gs.onrender.com/";
+  const baseUrl = process.env.BASE_URL || "http://localhost:5000";
 // ➕ Setup Multer Storage for image upload
 const storage = multer.diskStorage({
   destination: (req, file, cb) => {
@@ -29,8 +29,9 @@ router.post("/add", verifyToken, upload.single("image"), async (req, res) => {
   // const baseUrl = req.protocol + "://" + req.get("host");
   const baseUrl = "https://ecommercebackend-87gs.onrender.com/";
 
- const imageFilename = req.file ? `/uploads/${req.file.filename}` : null;
-
+  const imageFilename = req.file
+    ? `${baseUrl}/uploads/${req.file.filename}`
+    : null;
   const price = parseFloat(req.body.price);
   const subSubSubcatId =
     subsubsubcategory_id && subsubsubcategory_id.trim() !== ""
@@ -207,9 +208,67 @@ router.put("/:id", verifyToken, upload.single("image"), (req, res) => {
   } = req.body;
   const user = req.user;
 
-  // ✅ CHANGED: Get new image filename
-  const newImageFilename = req.file ? `/uploads/${req.file.filename}` : null;
+  const baseUrl = req.protocol + "://" + req.get("host");
 
+  const imageFilename = req.file
+    ? `${baseUrl}/uploads/${req.file.filename}`
+    : null;
+
+  const price = parseFloat(priceStr);
+  const subSubSubcatId =
+    subsubsubcategory_id && subsubsubcategory_id.trim() !== ""
+      ? parseInt(subsubsubcategory_id)
+      : null;
+  const qty = quantity ? parseInt(quantity) : 0;
+
+  // Basic validation
+  if (!name || isNaN(price) || !subSubSubcatId || isNaN(qty)) {
+    return res.status(400).json({
+      message:
+        "Name, valid Price, Quantity, and Sub-Sub-Subcategory ID are required",
+    });
+  }
+
+  db.query("SELECT * FROM products WHERE id = ?", [id], (err, results) => {
+    if (err) {
+      console.error("Select product error:", err);
+      return res.status(500).json({ message: err.message });
+    }
+    if (results.length === 0)
+      return res.status(404).json({ message: "Product not found" });
+
+    const product = results[0];
+
+    if (user.role !== "admin" && user.id !== product.seller_id) {
+      return res
+        .status(403)
+        .json({ message: "Unauthorized to update this product" });
+    }
+
+    const image_url = imageFilename || product.image_url;
+
+    const updateSQL = `
+      UPDATE products
+      SET name = ?, description = ?, price = ?, quantity = ?, subsubsubcategory_id = ?, image_url = ?
+      WHERE id = ?
+    `;
+
+    db.query(
+      updateSQL,
+      [name, description || "", price, qty, subSubSubcatId, image_url, id],
+      (err, result) => {
+        if (err) {
+          console.error("Update product error:", err);
+          return res.status(500).json({ message: err.message });
+        }
+
+        return res
+          .status(200)
+          .json({ message: "Product updated successfully" });
+      }
+    );
+  });
+});
 
 
 // ❌ Delete product by ID
