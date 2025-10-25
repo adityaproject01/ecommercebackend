@@ -18,60 +18,65 @@ const storage = multer.diskStorage({
 const upload = multer({ storage: storage });
 
 // 🔒 Add a product — Only sellers allowed
-router.post("/add", verifyToken, upload.single("image"), async (req, res) => {
-  const user = req.user;
+router.post(
+  "/add",
+  verifyToken,
+  uploadWithCloudinary("image"),
+  async (req, res) => {
+    const user = req.user;
 
-  if (user.role !== "seller") {
-    return res.status(403).json({ message: "Only sellers can add products" });
-  }
+    if (user.role !== "seller") {
+      return res.status(403).json({ message: "Only sellers can add products" });
+    }
 
-  const { name, description, subsubsubcategory_id, quantity } = req.body;
-  // const baseUrl = req.protocol + "://" + req.get("host");
-  const baseUrl = "https://ecommercebackend-87gs.onrender.com/";
+    const { name, description, subsubsubcategory_id, quantity } = req.body;
+    // const baseUrl = req.protocol + "://" + req.get("host");
+    const baseUrl = "https://ecommercebackend-87gs.onrender.com/";
 
-  const imageFilename = req.file
-    ? `${baseUrl}/uploads/${req.file.filename}`
-    : null;
-  const price = parseFloat(req.body.price);
-  const subSubSubcatId =
-    subsubsubcategory_id && subsubsubcategory_id.trim() !== ""
-      ? parseInt(subsubsubcategory_id)
+    const imageFilename = req.file
+      ? `${baseUrl}/uploads/${req.file.filename}`
       : null;
-  const qty = quantity ? parseInt(quantity) : 0;
+    const price = parseFloat(req.body.price);
+    const subSubSubcatId =
+      subsubsubcategory_id && subsubsubcategory_id.trim() !== ""
+        ? parseInt(subsubsubcategory_id)
+        : null;
+    const qty = quantity ? parseInt(quantity) : 0;
 
-  if (!name || !price || !subSubSubcatId || !imageFilename || isNaN(qty)) {
-    return res.status(400).json({
-      message:
-        "Name, Price, Quantity, Sub-Sub-Subcategory ID, and Image are required",
-    });
-  }
+    if (!name || !price || !subSubSubcatId || !imageFilename || isNaN(qty)) {
+      return res.status(400).json({
+        message:
+          "Name, Price, Quantity, Sub-Sub-Subcategory ID, and Image are required",
+      });
+    }
 
-  const sql = `
+    const sql = `
     INSERT INTO products (name, description, price, quantity, subsubsubcategory_id, image_url, seller_id)
     VALUES (?, ?, ?, ?, ?, ?, ?)
   `;
 
-  db.query(
-    sql,
-    [
-      name,
-      description || "",
-      price,
-      qty,
-      subSubSubcatId,
-      imageFilename,
-      user.id,
-    ],
-    (err, result) => {
-      if (err) return res.status(500).json({ message: err.message });
+    db.query(
+      sql,
+      [
+        name,
+        description || "",
+        price,
+        qty,
+        subSubSubcatId,
+        imageFilename,
+        user.id,
+      ],
+      (err, result) => {
+        if (err) return res.status(500).json({ message: err.message });
 
-      res.status(201).json({
-        message: "Product added successfully",
-        productId: result.insertId,
-      });
-    }
-  );
-});
+        res.status(201).json({
+          message: "Product added successfully",
+          productId: result.insertId,
+        });
+      }
+    );
+  }
+);
 router.get("/allProducts", verifyToken, (req, res) => {
   const user = req.user;
 
@@ -197,7 +202,7 @@ router.get("/:id", (req, res) => {
 });
 
 // ✏️ Update product (Only owner or admin)
-router.put("/:id", verifyToken, upload.single("image"), (req, res) => {
+router.put("/:id", verifyToken, uploadWithCloudinary("image"), (req, res) => {
   const { id } = req.params;
   const {
     name,

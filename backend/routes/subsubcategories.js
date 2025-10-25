@@ -2,10 +2,10 @@ const express = require("express");
 const router = express.Router();
 const db = require("../db");
 const { verifyToken } = require("../middleware/authMiddleware");
-const upload = require("../middleware/upload");
+const { uploadWithCloudinary } = require("../middleware/upload");
 
 // ➕ Create Sub-Subcategory (Admin only)
-router.post("/add", verifyToken, upload.single("image"), (req, res) => {
+router.post("/add", verifyToken, uploadWithCloudinary("image"), (req, res) => {
   const user = req.user;
   const { name } = req.body;
   const subcategory_id = parseInt(req.body.subcategory_id);
@@ -41,7 +41,7 @@ router.post("/add", verifyToken, upload.single("image"), (req, res) => {
 });
 
 // 📝 Update Sub-Subcategory (Admin only)
-router.put("/:id", verifyToken, upload.single("image"), (req, res) => {
+router.put("/:id", verifyToken, uploadWithCloudinary("image"), (req, res) => {
   const user = req.user;
   const { name, subcategory_id } = req.body;
   const subSubcategoryId = req.params.id;

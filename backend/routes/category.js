@@ -4,11 +4,12 @@ const express = require("express");
 const router = express.Router();
 const db = require("../db");
 const { verifyToken } = require("../middleware/authMiddleware");
-const upload = require("../middleware/upload");
+const { uploadWithCloudinary } = require("../middleware/upload");
+
 // ➕ Add category (admin only)
 
-router.post("/add", verifyToken, upload.single("image"), (req, res) => {
-  console.log(req.body,"d");
+router.post("/add", verifyToken, uploadWithCloudinary("image"), (req, res) => {
+  console.log(req.body, "d");
   const user = req.user;
   const { name } = req.body;
   if (user.role !== "admin") {
@@ -21,7 +22,7 @@ router.post("/add", verifyToken, upload.single("image"), (req, res) => {
       .json({ message: "Category name and image are required" });
   }
   // const baseUrl = req.protocol + "://" + req.get("host");
-  const baseUrl="https://ecommercebackend-87gs.onrender.com/"
+  const baseUrl = "https://ecommercebackend-87gs.onrender.com/";
   const image_url = req.file ? `${baseUrl}/uploads/${req.file.filename}` : null;
   // const image_url = `/uploads/${req.file.filename}`;
   console.log(image_url, "dsdsd");
@@ -43,7 +44,7 @@ router.get("/", (req, res) => {
 });
 
 // 🔄 Update category (admin only)
-router.put("/:id", verifyToken, upload.single("image"), (req, res) => {
+router.put("/:id", verifyToken, uploadWithCloudinary("image"), (req, res) => {
   const user = req.user;
   const categoryId = req.params.id;
   const { name } = req.body;

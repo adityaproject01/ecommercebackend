@@ -2,10 +2,10 @@ const express = require("express");
 const router = express.Router();
 const db = require("../db");
 const { verifyToken } = require("../middleware/authMiddleware");
-const upload = require("../middleware/upload");
+const { uploadWithCloudinary } = require("../middleware/upload");
 
 // ➕ Create Subcategory (Admin only)
-router.post("/add", verifyToken, upload.single("image"), (req, res) => {
+router.post("/add", verifyToken, uploadWithCloudinary("image"), (req, res) => {
   const user = req.user;
   const { name } = req.body;
 
@@ -22,7 +22,7 @@ router.post("/add", verifyToken, upload.single("image"), (req, res) => {
       .json({ message: "Name, category ID, and image are required" });
   }
   // const baseUrl = req.protocol + "://" + req.get("host");
-  const baseUrl="https://ecommercebackend-87gs.onrender.com/"
+  const baseUrl = "https://ecommercebackend-87gs.onrender.com/";
   const image_url = req.file ? `${baseUrl}/uploads/${req.file.filename}` : null;
   const sql =
     "INSERT INTO subcategories (name, category_id, image_url) VALUES (?, ?, ?)";
@@ -37,12 +37,12 @@ router.post("/add", verifyToken, upload.single("image"), (req, res) => {
 });
 
 // 📝 Update Subcategory (Admin only)
-router.put("/:id", verifyToken, upload.single("image"), (req, res) => {
+router.put("/:id", verifyToken, uploadWithCloudinary("image"), (req, res) => {
   const user = req.user;
   const subcategoryId = req.params.id;
   const { name, category_id } = req.body;
   // const baseUrl = req.protocol + "://" + req.get("host");
-  const baseUrl="https://ecommercebackend-87gs.onrender.com/"
+  const baseUrl = "https://ecommercebackend-87gs.onrender.com/";
 
   const image_url = req.file ? `${baseUrl}/uploads/${req.file.filename}` : null;
 
