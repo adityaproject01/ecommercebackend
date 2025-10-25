@@ -1,15 +1,15 @@
+// backend/routes/subSubSubCategory.js
 const express = require("express");
 const router = express.Router();
 const db = require("../db");
 const { verifyToken } = require("../middleware/authMiddleware");
 const uploadToCloudinary = require("../middleware/uploadCloudinary");
 
-
 // ✅ Create Sub-Sub-Subcategory
 router.post("/add", verifyToken, uploadToCloudinary("image"), (req, res) => {
   const user = req.user;
-  const { name = "" } = req.body;
-  const sub_subcategory_id = parseInt(req.body.sub_subcategory_id || 0);
+  const { name = "", subsubcategory_id } = req.body;
+
   if (user.role !== "admin") {
     return res
       .status(403)
@@ -19,15 +19,15 @@ router.post("/add", verifyToken, uploadToCloudinary("image"), (req, res) => {
   if (!req.file) {
     return res.status(400).json({ message: "Image is required" });
   }
-  const image_url = req.file.path; // <-- Cloudinary URL
 
-  // const image_url = `/uploads/${req.file.filename}`;
+  const image_url = req.file.path; // Cloudinary URL
+
   const sql = `
-    INSERT INTO sub_sub_subcategories (name, sub_subcategory_id, image_url)
+    INSERT INTO sub_sub_subcategories (name, subsubcategory_id, image_url)
     VALUES (?, ?, ?)
   `;
 
-  db.query(sql, [name, sub_subcategory_id, image_url], (err, result) => {
+  db.query(sql, [name, subsubcategory_id, image_url], (err, result) => {
     if (err) return res.status(500).json({ message: err.message });
 
     res.status(201).json({
@@ -40,9 +40,9 @@ router.post("/add", verifyToken, uploadToCloudinary("image"), (req, res) => {
 // 📝 Update Sub-Sub-Subcategory
 router.put("/:id", verifyToken, uploadToCloudinary("image"), (req, res) => {
   const user = req.user;
-  const { name = "", sub_subcategory_id } = req.body;
+  const { name = "", subsubcategory_id } = req.body;
   const id = req.params.id;
-  const image_url = req.file ? `/uploads/${req.file.filename}` : null;
+  const image_url = req.file ? req.file.path : null;
 
   if (user.role !== "admin") {
     return res
@@ -50,17 +50,17 @@ router.put("/:id", verifyToken, uploadToCloudinary("image"), (req, res) => {
       .json({ message: "Only admin can update sub-sub-subcategories" });
   }
 
-  if (!sub_subcategory_id) {
+  if (!subsubcategory_id) {
     return res.status(400).json({ message: "Sub-subcategory ID is required" });
   }
 
   const sql = `
     UPDATE sub_sub_subcategories
-    SET name = ?, sub_subcategory_id = ?, image_url = COALESCE(?, image_url)
+    SET name = ?, subsubcategory_id = ?, image_url = COALESCE(?, image_url)
     WHERE id = ?
   `;
 
-  db.query(sql, [name, sub_subcategory_id, image_url, id], (err, result) => {
+  db.query(sql, [name, subsubcategory_id, image_url, id], (err, result) => {
     if (err) return res.status(500).json({ message: err.message });
 
     if (result.affectedRows === 0) {
@@ -108,13 +108,12 @@ router.get("/", (req, res) => {
       ssc.id AS sub_subcategory_id,
       ssc.name AS sub_subcategory_name
     FROM sub_sub_subcategories sss
-    JOIN sub_subcategories ssc ON sss.sub_subcategory_id = ssc.id
+    JOIN sub_subcategories ssc ON sss.subsubcategory_id = ssc.id
     ORDER BY sss.name ASC
   `;
 
   db.query(sql, (err, results) => {
     if (err) return res.status(500).json({ message: err.message });
-
     res.status(200).json(results);
   });
 });
@@ -130,7 +129,7 @@ router.get("/:id", (req, res) => {
       ssc.id AS sub_subcategory_id,
       ssc.name AS sub_subcategory_name
     FROM sub_sub_subcategories sss
-    JOIN sub_subcategories ssc ON sss.sub_subcategory_id = ssc.id
+    JOIN sub_subcategories ssc ON sss.subsubcategory_id = ssc.id
     WHERE sss.id = ?
   `;
 
@@ -146,22 +145,19 @@ router.get("/:id", (req, res) => {
 });
 
 // 📦 Get by Sub-Subcategory ID
-router.get("/subsubcategory/:sub_subcategory_id", (req, res) => {
-  const subSubcategoryId = req.params.sub_subcategory_id;
+router.get("/subsubcategory/:subsubcategory_id", (req, res) => {
+  const subsubcategoryId = req.params.subsubcategory_id;
   const sql = `
-    SELECT 
-      id, name, image_url, subsubcategory_id
+    SELECT id, name, image_url, subsubcategory_id
     FROM sub_sub_subcategories
     WHERE subsubcategory_id = ?
     ORDER BY name ASC
   `;
 
-  db.query(sql, [subSubcategoryId], (err, results) => {
+  db.query(sql, [subsubcategoryId], (err, results) => {
     if (err) return res.status(500).json({ message: err.message });
-
     res.status(200).json(results);
   });
 });
-
 
 module.exports = router;
