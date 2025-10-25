@@ -4,7 +4,9 @@ const db = require("../db");
 const multer = require("multer");
 const { verifyToken } = require("../middleware/authMiddleware");
   const BASE_URL = "https://ecommercebackend-87gs.onrender.com/";
-  const baseUrl = process.env.BASE_URL || "http://localhost:5000";
+const baseUrl = process.env.BASE_URL || "http://localhost:5000";
+  const { uploadWithCloudinary } = require("../middleware/uploadCloudinary");
+
 // ➕ Setup Multer Storage for image upload
 const storage = multer.diskStorage({
   destination: (req, file, cb) => {

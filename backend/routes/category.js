@@ -4,7 +4,8 @@ const express = require("express");
 const router = express.Router();
 const db = require("../db");
 const { verifyToken } = require("../middleware/authMiddleware");
-const { uploadWithCloudinary } = require("../middleware/upload");
+  const { uploadWithCloudinary } = require("../middleware/uploadCloudinary");
+
 
 // ➕ Add category (admin only)
 
