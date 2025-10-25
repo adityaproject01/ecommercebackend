@@ -1,17 +1,18 @@
 // backend/middleware/uploadCloudinary.js
 const multer = require("multer");
 const { v2: cloudinary } = require("cloudinary");
-const streamifier = require("streamifier");
+const { CloudinaryStorage } = require("multer-storage-cloudinary");
 
-// Configure Cloudinary
+// Configure your Cloudinary credentials
 cloudinary.config({
   cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
   api_key: process.env.CLOUDINARY_API_KEY,
   api_secret: process.env.CLOUDINARY_API_SECRET,
 });
 
-// Multer memory storage
-const storage = multer.memoryStorage();
+// Multer storage for Cloudinary
+const storage = multer.memoryStorage(); // store in memory first
+
 const upload = multer({
   storage,
   limits: { fileSize: 5 * 1024 * 1024 }, // 5MB max
@@ -28,6 +29,7 @@ const upload = multer({
   },
 });
 
+// Middleware to upload to Cloudinary
 const uploadToCloudinary = (fieldName) => {
   return [
     upload.single(fieldName),
@@ -35,25 +37,17 @@ const uploadToCloudinary = (fieldName) => {
       if (!req.file) return next();
 
       try {
-        const streamUpload = (req) => {
-          return new Promise((resolve, reject) => {
-            const stream = cloudinary.uploader.upload_stream(
-              { folder: "ecommerce" },
-              (error, result) => {
-                if (result) {
-                  resolve(result);
-                } else {
-                  reject(error);
-                }
-              }
-            );
-            streamifier.createReadStream(req.file.buffer).pipe(stream);
-          });
-        };
+        const result = await cloudinary.uploader.upload_stream(
+          { folder: "ecommerce" },
+          (error, result) => {
+            if (error) return next(error);
+            req.file.path = result.secure_url; // save URL
+            next();
+          }
+        );
 
-        const result = await streamUpload(req);
-        req.file.path = result.secure_url; // <-- Cloudinary URL
-        next();
+        // Pipe buffer to Cloudinary
+        result.end(req.file.buffer);
       } catch (err) {
         next(err);
       }
