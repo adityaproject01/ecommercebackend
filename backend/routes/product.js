@@ -29,9 +29,8 @@ router.post("/add", verifyToken, upload.single("image"), async (req, res) => {
   // const baseUrl = req.protocol + "://" + req.get("host");
   const baseUrl = "https://ecommercebackend-87gs.onrender.com/";
 
-  const imageFilename = req.file
-    ? `${baseUrl}/uploads/${req.file.filename}`
-    : null;
+ const imageFilename = req.file ? `/uploads/${req.file.filename}` : null;
+
   const price = parseFloat(req.body.price);
   const subSubSubcatId =
     subsubsubcategory_id && subsubsubcategory_id.trim() !== ""
@@ -210,9 +209,8 @@ router.put("/:id", verifyToken, upload.single("image"), (req, res) => {
 
   const baseUrl = req.protocol + "://" + req.get("host");
 
-  const imageFilename = req.file
-    ? `${baseUrl}/uploads/${req.file.filename}`
-    : null;
+  const imageFilename = req.file ? `/uploads/${req.file.filename}` : null;
+
 
   const price = parseFloat(priceStr);
   const subSubSubcatId =
