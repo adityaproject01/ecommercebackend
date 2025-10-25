@@ -19,8 +19,9 @@ router.post("/add", verifyToken, uploadToCloudinary("image"), (req, res) => {
   if (!req.file) {
     return res.status(400).json({ message: "Image is required" });
   }
+  const image_url = req.file.path; // <-- Cloudinary URL
 
-  const image_url = `/uploads/${req.file.filename}`;
+  // const image_url = `/uploads/${req.file.filename}`;
   const sql = `
     INSERT INTO sub_sub_subcategories (name, sub_subcategory_id, image_url)
     VALUES (?, ?, ?)

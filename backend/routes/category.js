@@ -26,7 +26,6 @@ router.post("/add", verifyToken, uploadToCloudinary("image"), (req, res) => {
   const baseUrl = "https://ecommercebackend-87gs.onrender.com/";
   const image_url = req.file ? `${baseUrl}/uploads/${req.file.filename}` : null;
   // const image_url = `/uploads/${req.file.filename}`;
-  console.log(image_url, "dsdsd");
   const sql = `INSERT INTO categories (name, image_url) VALUES (?, ?)`;
   db.query(sql, [name, image_url], (err, result) => {
     if (err) return res.status(500).json({ message: err.message });
