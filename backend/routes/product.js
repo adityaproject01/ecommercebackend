@@ -232,9 +232,21 @@ router.put("/:id", verifyToken, uploadToCloudinary("image"), async (req, res) =>
     const qty = quantity ? parseInt(quantity) : 0;
 
     // 🧩 Validate essential fields (excluding image)
-    if (!name || isNaN(price) || !subSubSubcatId || isNaN(qty)) {
+    if (!name) {
       return res.status(400).json({
-        message: "Name, valid Price, Quantity, and Sub-Sub-Subcategory ID are required",
+        message: "Name are required",
+      });
+    } else if (isNaN(price)) {
+      return res.status(400).json({
+        message: " Price required",
+      });
+    } else if (!subSubSubcatId) {
+      return res.status(400).json({
+        message: "Quantity,  required",
+      });
+    } else if (isNaN(qty)) {
+      return res.status(400).json({
+        message: "Sub-Sub-Subcategory ID are required",
       });
     }
 
