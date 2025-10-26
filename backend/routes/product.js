@@ -211,7 +211,6 @@ router.get("/:id", (req, res) => {
 });
 
 // ✏️ Update product (Only owner or admin)
-// ✏️ Update product (Only owner or admin)
 router.put("/:id", verifyToken, uploadToCloudinary("image"), async (req, res) => {
   try {
     const { id } = req.params;
@@ -232,23 +231,21 @@ router.put("/:id", verifyToken, uploadToCloudinary("image"), async (req, res) =>
     const qty = quantity ? parseInt(quantity) : 0;
 
     // 🧩 Validate essential fields (excluding image)
-    if (!name) {
-      return res.status(400).json({
-        message: "Name are required",
-      });
-    } else if (isNaN(price)) {
-      return res.status(400).json({
-        message: " Price required",
-      });
-    } else if (!subSubSubcatId) {
-      return res.status(400).json({
-        message: "Quantity,  required",
-      });
-    } else if (isNaN(qty)) {
-      return res.status(400).json({
-        message: "Sub-Sub-Subcategory ID are required",
-      });
-    }
+ if (!name) {
+   return res.status(400).json({ message: "Name is required" });
+ }
+ if (isNaN(price)) {
+   return res.status(400).json({ message: "Valid price is required" });
+ }
+ if (!subSubSubcatId) {
+   return res
+     .status(400)
+     .json({ message: "Sub-Sub-Subcategory ID is required" });
+ }
+ if (isNaN(qty)) {
+   return res.status(400).json({ message: "Quantity is required" });
+ }
+
 
     // 🔍 Fetch existing product
     db.query("SELECT * FROM products WHERE id = ?", [id], async (err, results) => {
