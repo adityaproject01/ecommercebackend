@@ -23,8 +23,8 @@ router.post("/add", verifyToken, uploadToCloudinary("image"), (req, res) => {
       .json({ message: "Category name and image are required" });
   }
   // const baseUrl = req.protocol + "://" + req.get("host");
-  // const baseUrl = "https://ecommercebackend-87gs.onrender.com/";
-    const image_url = req.file ? req.file.path : null; 
+  const baseUrl = "https://ecommercebackend-87gs.onrender.com/";
+  const image_url = req.file ? `${baseUrl}/uploads/${req.file.filename}` : null;
   // const image_url = `/uploads/${req.file.filename}`;
   const sql = `INSERT INTO categories (name, image_url) VALUES (?, ?)`;
   db.query(sql, [name, image_url], (err, result) => {
@@ -59,9 +59,11 @@ router.put("/:id", verifyToken, uploadToCloudinary("image"), (req, res) => {
     return res.status(400).json({ message: "Category name is required" });
   }
 
-  // const baseUrl = req.protocol + "://" + req.get("host");
-  const newImageUrl = req.file ? req.file.path : null; 
-console.log(newImageUrl,"newImageURl")
+  const baseUrl = req.protocol + "://" + req.get("host");
+  const newImageUrl = req.file
+    ? `${baseUrl}/uploads/${req.file.filename}`
+    : null;
+
   // If no image uploaded, fetch the current one
   if (!newImageUrl) {
     const getImageQuery = "SELECT image_url FROM categories WHERE id = ?";
@@ -72,7 +74,6 @@ console.log(newImageUrl,"newImageURl")
       }
 
       const currentImageUrl = results[0].image_url;
-console.log(currentImageUrl, "currentImageUrl");
 
       const updateQuery =
         "UPDATE categories SET name = ?, image_url = ? WHERE id = ?";

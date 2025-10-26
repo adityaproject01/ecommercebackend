@@ -23,8 +23,8 @@ router.post("/add", verifyToken, uploadToCloudinary("image"), (req, res) => {
       .json({ message: "Name, category ID, and image are required" });
   }
   // const baseUrl = req.protocol + "://" + req.get("host");
-  const baseUrl = "https://ecommercebackend-87gs.onrender.com/";
-  const image_url = req.file ? `${baseUrl}/uploads/${req.file.filename}` : null;
+  // const baseUrl = "https://ecommercebackend-87gs.onrender.com/";
+  const image_url = req.file ? req.file.path : null; 
   const sql =
     "INSERT INTO subcategories (name, category_id, image_url) VALUES (?, ?, ?)";
   db.query(sql, [name, category_id, image_url], (err, result) => {
@@ -43,9 +43,9 @@ router.put("/:id", verifyToken, uploadToCloudinary("image"), (req, res) => {
   const subcategoryId = req.params.id;
   const { name, category_id } = req.body;
   // const baseUrl = req.protocol + "://" + req.get("host");
-  const baseUrl = "https://ecommercebackend-87gs.onrender.com/";
+  // const baseUrl = "https://ecommercebackend-87gs.onrender.com/";
 
-  const image_url = req.file ? `${baseUrl}/uploads/${req.file.filename}` : null;
+  const image_url = req.file ? req.file.path : null;
 
   if (user.role !== "admin") {
     return res
