@@ -211,77 +211,83 @@ router.get("/:id", (req, res) => {
 });
 
 // ✏️ Update product (Only owner or admin)
-router.put("/:id", verifyToken, uploadToCloudinary("image"), (req, res) => {
-  const { id } = req.params;
-  const {
-    name,
-    description,
-    subsubsubcategory_id,
-    quantity,
-    price: priceStr,
-  } = req.body;
-  const user = req.user;
+// ✏️ Update product (Only owner or admin)
+router.put("/:id", verifyToken, uploadToCloudinary("image"), async (req, res) => {
+  try {
+    const { id } = req.params;
+    const {
+      name,
+      description,
+      subsubsubcategory_id,
+      quantity,
+      price: priceStr,
+    } = req.body;
+    const user = req.user;
 
-  const baseUrl = req.protocol + "://" + req.get("host");
+    const price = parseFloat(priceStr);
+    const subSubSubcatId =
+      subsubsubcategory_id && subsubsubcategory_id.trim() !== ""
+        ? parseInt(subsubsubcategory_id)
+        : null;
+    const qty = quantity ? parseInt(quantity) : 0;
 
-const imageFilename = req.file ? req.file.path : null;
-
-
-  const price = parseFloat(priceStr);
-  const subSubSubcatId =
-    subsubsubcategory_id && subsubsubcategory_id.trim() !== ""
-      ? parseInt(subsubsubcategory_id)
-      : null;
-  const qty = quantity ? parseInt(quantity) : 0;
-
-  // Basic validation
-  if (!name || isNaN(price) || !subSubSubcatId || isNaN(qty)) {
-    return res.status(400).json({
-      message:
-        "Name, valid Price, Quantity, and Sub-Sub-Subcategory ID are required",
-    });
-  }
-
-  db.query("SELECT * FROM products WHERE id = ?", [id], (err, results) => {
-    if (err) {
-      console.error("Select product error:", err);
-      return res.status(500).json({ message: err.message });
-    }
-    if (results.length === 0)
-      return res.status(404).json({ message: "Product not found" });
-
-    const product = results[0];
-
-    if (user.role !== "admin" && user.id !== product.seller_id) {
-      return res
-        .status(403)
-        .json({ message: "Unauthorized to update this product" });
+    // 🧩 Validate essential fields (excluding image)
+    if (!name || isNaN(price) || !subSubSubcatId || isNaN(qty)) {
+      return res.status(400).json({
+        message: "Name, valid Price, Quantity, and Sub-Sub-Subcategory ID are required",
+      });
     }
 
-    const image_url = imageFilename || product.image_url;
-
-    const updateSQL = `
-      UPDATE products
-      SET name = ?, description = ?, price = ?, quantity = ?, subsubsubcategory_id = ?, image_url = ?
-      WHERE id = ?
-    `;
-
-    db.query(
-      updateSQL,
-      [name, description || "", price, qty, subSubSubcatId, image_url, id],
-      (err, result) => {
-        if (err) {
-          console.error("Update product error:", err);
-          return res.status(500).json({ message: err.message });
-        }
-
-        return res
-          .status(200)
-          .json({ message: "Product updated successfully" });
+    // 🔍 Fetch existing product
+    db.query("SELECT * FROM products WHERE id = ?", [id], async (err, results) => {
+      if (err) {
+        console.error("Select product error:", err);
+        return res.status(500).json({ message: err.message });
       }
-    );
-  });
+
+      if (results.length === 0) {
+        return res.status(404).json({ message: "Product not found" });
+      }
+
+      const product = results[0];
+
+      // 🔒 Check permissions (only owner or admin)
+      if (user.role !== "admin" && user.id !== product.seller_id) {
+        return res.status(403).json({ message: "Unauthorized to update this product" });
+      }
+
+      // 🖼️ Use new Cloudinary image if uploaded, else keep existing
+      const image_url = req.file?.path || req.file?.url || product.image_url;
+
+      // 🛠️ Update query
+      const updateSQL = `
+        UPDATE products
+        SET name = ?, description = ?, price = ?, quantity = ?, subsubsubcategory_id = ?, image_url = ?
+        WHERE id = ?
+      `;
+
+      db.query(
+        updateSQL,
+        [name, description || "", price, qty, subSubSubcatId, image_url, id],
+        (err, result) => {
+          if (err) {
+            console.error("Update product error:", err);
+            return res.status(500).json({ message: err.message });
+          }
+
+          return res.status(200).json({
+            message: "✅ Product updated successfully",
+            updatedImage: image_url,
+          });
+        }
+      );
+    });
+  } catch (err) {
+    console.error("Update product exception:", err);
+    res.status(500).json({ message: "Internal server error" });
+  }
 });
+
 
 
 // ❌ Delete product by ID
