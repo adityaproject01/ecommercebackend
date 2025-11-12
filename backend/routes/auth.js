@@ -11,7 +11,7 @@ router.post("/signup", async (req, res) => {
     return res.status(400).json({ message: "All fields are required" });
   }
 
-  const hashedPassword = await bcrypt.hash(password, 10);
+  const hashedPassword = await bcrypt.hash(password, 8);
 
   db.query(
     "INSERT INTO users (name, email, password, role) VALUES (?, ?, ?, ?)",
