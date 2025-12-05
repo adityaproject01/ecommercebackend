@@ -25,12 +25,18 @@ router.get("/:orderId", verifyToken, async (req, res) => {
         return res.status(403).json({ message: "Access denied" });
       }
 
-      const itemsSql = `
-        SELECT oi.*, p.name AS product_name 
-        FROM order_items oi
-        JOIN products p ON oi.product_id = p.id 
-        WHERE oi.order_id = ?
-      `;
+
+
+const itemsSql = `
+  SELECT 
+    oi.*, 
+    p.name AS product_name,
+    p.image_url AS product_image
+  FROM order_items oi
+  JOIN products p ON oi.product_id = p.id 
+  WHERE oi.order_id = ?
+`;
+
 
       return db.query(itemsSql, [orderId], (err, items) => {
         if (err) return res.status(500).json({ message: err.message });
