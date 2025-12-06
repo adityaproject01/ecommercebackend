@@ -19,10 +19,8 @@ router.get("/", verifyToken, (req, res) => {
       a.state         AS address_state,
       a.postal_code   AS address_postal_code,
       a.country       AS address_country,
-
-      -- 👇 one sample image from products in this order
       (
-        SELECT p.product_image
+        SELECT p.image_url
         FROM order_items oi2
         JOIN products p ON oi2.product_id = p.id
         WHERE oi2.order_id = o.id
@@ -36,7 +34,6 @@ router.get("/", verifyToken, (req, res) => {
   let params = [];
 
   if (user.role === "customer") {
-    // 🧑‍💻 Customer: only their own orders
     sql = `
       ${baseSelect}
       WHERE o.user_id = ?
@@ -45,7 +42,6 @@ router.get("/", verifyToken, (req, res) => {
     params = [user.id];
 
   } else if (user.role === "seller") {
-    // 🛒 Seller: orders that contain *their* products
     sql = `
       ${baseSelect}
       WHERE EXISTS (
@@ -60,7 +56,6 @@ router.get("/", verifyToken, (req, res) => {
     params = [user.id];
 
   } else if (user.role === "admin") {
-    // 👑 Admin: all orders
     sql = `
       ${baseSelect}
       ORDER BY o.created_at DESC
@@ -73,7 +68,7 @@ router.get("/", verifyToken, (req, res) => {
 
   db.query(sql, params, (err, results) => {
     if (err) {
-      console.error("Order history SQL error:", err); // 👈 check this in terminal
+      console.error("Order history SQL error:", err);  // check this in your server console
       return res.status(500).json({ message: err.message });
     }
 
