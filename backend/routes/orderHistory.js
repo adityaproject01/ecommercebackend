@@ -7,40 +7,68 @@ const { verifyToken } = require("../middleware/authMiddleware");
 router.get("/", verifyToken, (req, res) => {
   const user = req.user;
 
-  let sql;
+  // Base SELECT with address + preview image from first product
+  const baseSelect = `
+    SELECT 
+      o.*,
+      a.full_name     AS address_full_name,
+      a.phone         AS address_phone,
+      a.address_line1 AS address_line1,
+      a.address_line2 AS address_line2,
+      a.city          AS address_city,
+      a.state         AS address_state,
+      a.postal_code   AS address_postal_code,
+      a.country       AS address_country,
+
+      -- 👇 sample image from products in this order
+      MIN(p.image_url) AS preview_image
+    FROM orders o
+    LEFT JOIN addresses a ON o.address_id = a.id
+    LEFT JOIN order_items oi ON o.id = oi.order_id
+    LEFT JOIN products p ON oi.product_id = p.id
+  `;
+
+  let sql = "";
+  let params = [];
 
   if (user.role === "customer") {
-    sql = "SELECT * FROM orders WHERE user_id = ?";
-    db.query(sql, [user.id], (err, results) => {
-      if (err) return res.status(500).json({ message: err.message });
-
-      res.status(200).json(results);
-    });
-  }
-
-  if (user.role === "seller") {
+    // 🧑‍💻 Customer: only their own orders
     sql = `
-      SELECT DISTINCT o.* 
-      FROM orders o
-      JOIN order_items oi ON o.id = oi.order_id
-      JOIN products p ON oi.product_id = p.id
-      WHERE p.seller_id = ?
+      ${baseSelect}
+      WHERE o.user_id = ?
+      GROUP BY o.id
+      ORDER BY o.created_at DESC
     `;
-    db.query(sql, [user.id], (err, results) => {
-      if (err) return res.status(500).json({ message: err.message });
+    params = [user.id];
 
-      res.status(200).json(results);
-    });
+  } else if (user.role === "seller") {
+    // 🛒 Seller: orders that contain their products
+    sql = `
+      ${baseSelect}
+      WHERE p.seller_id = ?
+      GROUP BY o.id
+      ORDER BY o.created_at DESC
+    `;
+    params = [user.id];
+
+  } else if (user.role === "admin") {
+    // 👑 Admin: all orders
+    sql = `
+      ${baseSelect}
+      GROUP BY o.id
+      ORDER BY o.created_at DESC
+    `;
+    params = [];
+
+  } else {
+    return res.status(403).json({ message: "Unauthorized role" });
   }
 
-  if (user.role === "admin") {
-    sql = "SELECT * FROM orders";
-    db.query(sql, (err, results) => {
-      if (err) return res.status(500).json({ message: err.message });
+  db.query(sql, params, (err, results) => {
+    if (err) return res.status(500).json({ message: err.message });
 
-      res.status(200).json(results);
-    });
-  }
+    res.status(200).json(results);
+  });
 });
 
 module.exports = router;
