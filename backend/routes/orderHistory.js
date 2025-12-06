@@ -20,16 +20,16 @@ router.get("/", verifyToken, (req, res) => {
       a.postal_code   AS address_postal_code,
       a.country       AS address_country,
 
-      -- one sample image from any product in this order
+      -- 👇 one sample image from products in this order
       (
-        SELECT p.image_url
+        SELECT p.product_image
         FROM order_items oi2
         JOIN products p ON oi2.product_id = p.id
         WHERE oi2.order_id = o.id
         LIMIT 1
       ) AS preview_image
     FROM orders o
-    LEFT JOIN addresses a ON o.address_id = a.id
+    LEFT JOIN address a ON o.address_id = a.id
   `;
 
   let sql = "";
@@ -73,7 +73,7 @@ router.get("/", verifyToken, (req, res) => {
 
   db.query(sql, params, (err, results) => {
     if (err) {
-      console.error("Order history SQL error:", err); // 👈 check this in your server console
+      console.error("Order history SQL error:", err); // 👈 check this in terminal
       return res.status(500).json({ message: err.message });
     }
 
