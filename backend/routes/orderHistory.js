@@ -7,7 +7,7 @@ const { verifyToken } = require("../middleware/authMiddleware");
 router.get("/", verifyToken, (req, res) => {
   const user = req.user;
 
-  // Base SELECT with address + preview image from first product
+  // Base SELECT with address + preview image via subquery
   const baseSelect = `
     SELECT 
       o.*,
@@ -20,12 +20,16 @@ router.get("/", verifyToken, (req, res) => {
       a.postal_code   AS address_postal_code,
       a.country       AS address_country,
 
-      -- 👇 sample image from products in this order
-      MIN(p.image_url) AS preview_image
+      -- one sample image from any product in this order
+      (
+        SELECT p.image_url
+        FROM order_items oi2
+        JOIN products p ON oi2.product_id = p.id
+        WHERE oi2.order_id = o.id
+        LIMIT 1
+      ) AS preview_image
     FROM orders o
     LEFT JOIN addresses a ON o.address_id = a.id
-    LEFT JOIN order_items oi ON o.id = oi.order_id
-    LEFT JOIN products p ON oi.product_id = p.id
   `;
 
   let sql = "";
@@ -36,17 +40,21 @@ router.get("/", verifyToken, (req, res) => {
     sql = `
       ${baseSelect}
       WHERE o.user_id = ?
-      GROUP BY o.id
       ORDER BY o.created_at DESC
     `;
     params = [user.id];
 
   } else if (user.role === "seller") {
-    // 🛒 Seller: orders that contain their products
+    // 🛒 Seller: orders that contain *their* products
     sql = `
       ${baseSelect}
-      WHERE p.seller_id = ?
-      GROUP BY o.id
+      WHERE EXISTS (
+        SELECT 1
+        FROM order_items oi
+        JOIN products p ON oi.product_id = p.id
+        WHERE oi.order_id = o.id
+          AND p.seller_id = ?
+      )
       ORDER BY o.created_at DESC
     `;
     params = [user.id];
@@ -55,7 +63,6 @@ router.get("/", verifyToken, (req, res) => {
     // 👑 Admin: all orders
     sql = `
       ${baseSelect}
-      GROUP BY o.id
       ORDER BY o.created_at DESC
     `;
     params = [];
@@ -65,7 +72,10 @@ router.get("/", verifyToken, (req, res) => {
   }
 
   db.query(sql, params, (err, results) => {
-    if (err) return res.status(500).json({ message: err.message });
+    if (err) {
+      console.error("Order history SQL error:", err); // 👈 check this in your server console
+      return res.status(500).json({ message: err.message });
+    }
 
     res.status(200).json(results);
   });
